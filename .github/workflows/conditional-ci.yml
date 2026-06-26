@@ -1,0 +1,24 @@
+name: Conditional CI Pipeline
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run application build
+        run: echo "Building application packages..."
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/heads/feature/') && success()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run application testing suite
+        run: echo "Running automated test suites on feature branch..."
